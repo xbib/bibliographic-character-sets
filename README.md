@@ -65,13 +65,25 @@ Usage:
 
 Usage:
  
-     Charset.forName("x-MAB")
+     Charset.forName("ISO-5426")
 
 ### ISO 5428 "Greek alphabet coded character set for bibliographic information interchange"
 
+Usage:
+ 
+     Charset.forName("ISO-5428")
+
 ### Pica (a variant of the INTERMARC character set, a 1979 french/danish adoption of USMARC/UKMARC)
 
+Usage:
+ 
+     Charset.forName("PICA")
+
 ### MAB-Diskette (a variant of CP850 character set)
+
+Usage:
+ 
+     Charset.forName("MAB-DISKETTE")
 
 ### US-ASCII (re-implementation for demonstration purpose, disabled by default)
 
