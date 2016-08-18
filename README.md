@@ -11,7 +11,26 @@ system software.
 The reason to provide these character sets is to assist the public 
 in migrating library data to Unicode, and UTF-8, respectively.
 
-You can include this jar in the classpath, the Java CharsetProvider and
+## Usage
+
+With Maven
+
+    <dependency>
+        <groupId>org.xbib</groupId>
+        <artifactId>bibliographic-character-sets</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+
+With Gradle
+
+    configurations {
+      provided
+    }
+    dependencies {
+       provided 'org.xbib:bibliographic-character-sets:1.0.0'
+    }
+
+You can also include this jar in the classpath, the Java CharsetProvider and
 ServiceLoader API will then make the character sets available, 
 e.g. by `Charset.forName(name)`
 
