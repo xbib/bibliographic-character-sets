@@ -1,0 +1,39 @@
+These bibliographic characterssets are collected and improved
+by Jörg Prante <joergprante@gmail.com>
+
+Thanks to:
+
+Library of Congress
+The Library of Congress provides an ANSEL code table file
+
+https://www.loc.gov/marc/specifications/codetables.xml
+
+at https://www.loc.gov/marc/specifications/specchartables.html for making the
+character set implementation of ANSEL/Z39.47 possible, including east
+asian code characters (EACC).
+
+US-ASCII
+The US-ASCII re-implementation was taken from the GNU classpath project.
+It is provided as a demonstration of a simple single-byte character set.
+The original code was licensed by the GNU Public License 2.1 (GPL)
+
+Simple ANSEL
+The ANSEL charset implementation by Piotr Andzel http://anselcharset.sourceforge.net/
+has been included as "simple ANSEL". The original code was licensed under Less
+GNU Public License 3 (LGPL 3.0)
+
+MAB
+The MAB Charset Java implementation was developed by Jürgen Kett of
+Deutsche Nationalbibliothek (DNB) in 2004 and was licensed by GNU Public License 2 (GPL)
+
+MAB-Diskette
+This is a CP850 variant which could only be implemented by the help of
+Thomas Berger http://www.gymel.com/charsets/MAB-Diskette.html
+
+PicaCharset
+An alternative PICA character set implementation of Deutsche Nationalbibliothek (DNB)
+The original licence was GNU Public License 2 (GPL).
+
+ISO 5428:1984, "Greek alphabet coded character set for bibliographic information interchange",
+has been implemented by the help of https://en.wikipedia.org/wiki/ISO_5428
+
