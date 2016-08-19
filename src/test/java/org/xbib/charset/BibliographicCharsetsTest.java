@@ -31,9 +31,12 @@
  */
 package org.xbib.charset;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  *
@@ -43,10 +46,16 @@ public class BibliographicCharsetsTest {
     @Test
     public void testAvailability() {
         Charset charset = BibliographicCharsets.ANSEL;
+        assertEquals("hello", new String("hello".getBytes(StandardCharsets.US_ASCII), charset));
         charset = BibliographicCharsets.ISO5426;
+        assertEquals("hello", new String("hello".getBytes(StandardCharsets.US_ASCII), charset));
         charset = BibliographicCharsets.ISO5428;
+        assertEquals("hello", new String("hello".getBytes(StandardCharsets.US_ASCII), charset));
         charset = BibliographicCharsets.MAB;
+        assertEquals("hello", new String("hello".getBytes(StandardCharsets.US_ASCII), charset));
         charset = BibliographicCharsets.MAB_DISKETTE;
+        assertEquals("hello", new String("hello".getBytes(StandardCharsets.US_ASCII), charset));
         charset = BibliographicCharsets.PICA;
+        assertEquals("hello", new String("hello".getBytes(StandardCharsets.US_ASCII), charset));
     }
 }

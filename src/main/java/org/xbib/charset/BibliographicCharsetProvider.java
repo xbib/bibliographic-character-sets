@@ -52,7 +52,7 @@ public class BibliographicCharsetProvider extends CharsetProvider {
      * If there are no remaining references to this instance,
      * the character set will be removed by the garbage collector.
      */
-    private static volatile SoftReference<BibliographicCharsetProvider> instance = null;
+    private static volatile BibliographicCharsetProvider instance = new BibliographicCharsetProvider();
     private final Map<String, String> classMap;
     private final Map<String, String> aliasMap;
     private final Map<String, String[]> aliasNameMap;
@@ -77,26 +77,16 @@ public class BibliographicCharsetProvider extends CharsetProvider {
         charset("PICA", "Pica", new String[]{"Pica", "pica"});
         charset("x-PICA", "PicaCharset", new String[]{"x-pica"});
         charset("SIMPLE_ANSEL", "SimpleAnselCharset", new String[]{});
-        instance = new SoftReference<>(this);
     }
 
     /**
      * List all aliases defined for a character set.
      *
-     * @param s the name of the character set
+     * @param charsetName the name of the character set
      * @return an alias string array
      */
-    static String[] aliasesFor(String s) {
-        SoftReference<BibliographicCharsetProvider> softreference = instance;
-        BibliographicCharsetProvider charsets = null;
-        if (softreference != null) {
-            charsets = softreference.get();
-        }
-        if (charsets == null) {
-            charsets = new BibliographicCharsetProvider();
-            instance = new SoftReference<>(charsets);
-        }
-        return charsets.aliases(s);
+    static String[] aliasesFor(String charsetName) {
+        return instance.aliasNameMap.get(charsetName);
     }
 
     @Override
@@ -165,9 +155,5 @@ public class BibliographicCharsetProvider extends CharsetProvider {
             logger.log(Level.WARNING, "Instantiation failed: " + packagePrefix + "." + className);
         }
         return null;
-    }
-
-    private String[] aliases(String s) {
-        return (String[]) aliasNameMap.get(s);
     }
 }

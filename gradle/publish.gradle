@@ -8,6 +8,40 @@ task xbibUpload(type: Upload) {
                 repository(url: uri('scpexe://xbib.org/repository')) {
                     authentication(userName: xbibUsername, privateKey: xbibPrivateKey)
                 }
+                snapshotRepository(url: uri('scpexe://xbib.org/repository/snapshots')) {
+                    authentication(userName: xbibUsername, privateKey: xbibPrivateKey)
+                }
+                pom.project {
+                    name projectName
+                    description projectDescription
+                    packaging 'jar'
+                    inceptionYear '2016'
+                    url scmUrl
+                    organization {
+                        name 'xbib'
+                        url 'http://xbib.org'
+                    }
+                    developers {
+                        developer {
+                            id user
+                            name 'Jörg Prante'
+                            email 'joergprante@gmail.com'
+                            url 'https://github.com/jprante'
+                        }
+                    }
+                    scm {
+                        url scmUrl
+                        connection scmConnection
+                        developerConnection scmDeveloperConnection
+                    }
+                    licenses {
+                        license {
+                            name 'Affero GNU Public License Version 3'
+                            url 'http://www.gnu.org/licenses/agpl-3.0.html'
+                        }
+                    }
+                }
+
             }
         }
     }
@@ -27,8 +61,8 @@ task mavenCentralUpload(type: Upload) {
                     authentication(userName: ossrhUsername, password: ossrhPassword)
                 }
                 pom.project {
-                    name name
-                    description description
+                    name projectName
+                    description projectDescription
                     packaging 'jar'
                     inceptionYear '2016'
                     url scmUrl

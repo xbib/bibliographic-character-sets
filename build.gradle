@@ -3,6 +3,7 @@ println "Host: " + java.net.InetAddress.getLocalHost()
 println "Gradle: " + gradle.gradleVersion + " JVM: " + org.gradle.internal.jvm.Jvm.current() + " Groovy: " + GroovySystem.getVersion()
 println "Build: group: '${project.group}', name: '${project.name}', version: '${project.version}'"
 
+apply from: 'gradle/ext.gradle'
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'signing'
