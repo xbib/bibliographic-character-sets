@@ -43,12 +43,17 @@ import java.nio.charset.CoderResult;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.xml.stream.XMLStreamException;
 
 /**
  *
  */
 public class AnselCharset extends Charset {
+
+    private static final Logger logger = Logger.getLogger(AnselCharset.class.getName());
 
     private static final Map<String, AnselCodeTableParser.CharacterSet> characterSetMap;
 
@@ -63,7 +68,8 @@ public class AnselCharset extends Charset {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            // sonar wants logging
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -135,7 +141,8 @@ public class AnselCharset extends Charset {
                         try {
                             w.write(diacritics.toCharArray());
                         } catch (IOException e) {
-                            // dummy
+                            // sonar wants logging
+                            logger.log(Level.SEVERE, e.getMessage(), e);
                             w.flush();
                         }
                         diacritics = new CharArrayWriter();

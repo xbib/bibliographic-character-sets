@@ -37,6 +37,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -48,6 +51,8 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 class AnselCodeTableParser {
+
+    private static final Logger logger = Logger.getLogger(AnselCodeTableParser.class.getName());
 
     private final List<CodeTable> codeTables;
 
@@ -64,8 +69,8 @@ class AnselCodeTableParser {
         try {
             codeTables = createCodeTables(inputStream);
         } catch (XMLStreamException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
             codeTables = null;
-            // ignore
         }
         this.codeTables = codeTables;
     }

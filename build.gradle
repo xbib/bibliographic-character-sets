@@ -1,3 +1,6 @@
+plugins {
+    id "org.sonarqube" version "2.1-rc1"
+}
 
 println "Host: " + java.net.InetAddress.getLocalHost()
 println "Gradle: " + gradle.gradleVersion + " JVM: " + org.gradle.internal.jvm.Jvm.current() + " Groovy: " + GroovySystem.getVersion()

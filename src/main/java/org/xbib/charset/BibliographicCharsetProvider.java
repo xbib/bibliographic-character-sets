@@ -60,7 +60,7 @@ public class BibliographicCharsetProvider extends CharsetProvider {
     private final String packagePrefix;
 
     /**
-     * Constructor must be public.
+     * Constructor must be public bevause of ServiceLoader.
      */
     public BibliographicCharsetProvider() {
         classMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
@@ -148,11 +148,11 @@ public class BibliographicCharsetProvider extends CharsetProvider {
             cache.put(charsetName, new SoftReference<>(charset));
             return charset;
         } catch (ClassNotFoundException e1) {
-            logger.log(Level.WARNING, "Class not found: " + packagePrefix + "." + className);
+            logger.log(Level.WARNING, "Class not found: " + packagePrefix + "." + className, e1);
         } catch (IllegalAccessException e2) {
-            logger.log(Level.WARNING, "Illegal access: " + packagePrefix + "." + className);
+            logger.log(Level.WARNING, "Illegal access: " + packagePrefix + "." + className, e2);
         } catch (InstantiationException e3) {
-            logger.log(Level.WARNING, "Instantiation failed: " + packagePrefix + "." + className);
+            logger.log(Level.WARNING, "Instantiation failed: " + packagePrefix + "." + className, e3);
         }
         return null;
     }
