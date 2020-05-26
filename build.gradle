@@ -1,71 +1,31 @@
 plugins {
-    id "org.sonarqube" version "2.1-rc1"
+    id "de.marcphilipp.nexus-publish" version "0.4.0"
+    id "io.codearte.nexus-staging" version "0.21.1"
 }
 
-println "Host: " + java.net.InetAddress.getLocalHost()
-println "Gradle: " + gradle.gradleVersion + " JVM: " + org.gradle.internal.jvm.Jvm.current() + " Groovy: " + GroovySystem.getVersion()
-println "Build: group: '${project.group}', name: '${project.name}', version: '${project.version}'"
-
-apply from: 'gradle/ext.gradle'
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'signing'
-apply plugin: 'findbugs'
-apply plugin: 'pmd'
-apply plugin: 'checkstyle'
-
-repositories {
-    mavenLocal()
-    mavenCentral()
-    jcenter()
-    maven {
-        url "http://xbib.org/repository"
-    }
+wrapper {
+    gradleVersion = "${project.property('gradle.wrapper.version')}"
+    distributionType = Wrapper.DistributionType.ALL
 }
 
-configurations {
-    wagon
+ext {
+    user = 'xbib'
+    name = 'bibliographic-character-sets'
+    description = 'Bibliographic character sets for Java'
+    inceptionYear = '2016'
+    url = 'https://github.com/' + user + '/' + name
+    scmUrl = 'https://github.com/' + user + '/' + name
+    scmConnection = 'scm:git:git://github.com/' + user + '/' + name + '.git'
+    scmDeveloperConnection = 'scm:git:ssh://git@github.com:' + user + '/' + name + '.git'
+    issueManagementSystem = 'Github'
+    issueManagementUrl = ext.scmUrl + '/issues'
+    licenseName = 'Affero GNU Public License Version 3'
+    licenseUrl = 'http://www.gnu.org/licenses/agpl-3.0.html'
 }
 
-dependencies {
-    testCompile "org.apache.logging.log4j:log4j-core:2.5"
-    testCompile('junit:junit:4.12')
-    wagon 'org.apache.maven.wagon:wagon-ssh-external:2.10'
-}
-
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
-
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-tasks.withType(JavaCompile) {
-    options.compilerArgs << "-Xlint:deprecation,unchecked"
-}
-test {
-    testLogging {
-        showStandardStreams = false
-        exceptionFormat = 'full'
-    }
-}
-tasks.withType(FindBugs) {
-    ignoreFailures = true
-    reports {
-        xml.enabled = false
-        html.enabled = true
-    }
-}
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier 'sources'
-    from sourceSets.main.allSource
-}
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier 'javadoc'
-}
-artifacts {
-    archives sourcesJar, javadocJar
-}
-if (project.hasProperty('signing.keyId')) {
-    signing {
-        sign configurations.archives
-    }
-}
-apply from: 'gradle/publish.gradle'
+apply plugin: 'java-library'
+apply from: rootProject.file('gradle/ide/idea.gradle')
+apply from: rootProject.file('gradle/compile/java.gradle')
+apply from: rootProject.file('gradle/test/junit5.gradle')
+apply from: rootProject.file('gradle/publishing/publication.gradle')
+apply from: rootProject.file('gradle/publishing/sonatype.gradle')

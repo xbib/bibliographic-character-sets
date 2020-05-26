@@ -31,20 +31,20 @@
  */
 package org.xbib.charset;
 
-import org.junit.Assert;
-import org.junit.Test;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 
 /**
  *
  */
-public class NormalizerTest extends Assert {
+public class NormalizerTest {
 
     @Test
-    public void testNormalizer() throws Exception {
+    public void testNormalizer() {
         byte[] b = new byte[]{(byte) 103, (byte) 101, (byte) 109, (byte) 97, (byte) 204, (byte) 136, (byte) 195, (byte) 159};
-        String input = new String(b, "UTF-8");
+        String input = new String(b, StandardCharsets.UTF_8);
         String norm = Normalizer.normalize(input, Normalizer.Form.NFC);
         assertEquals("gemäß", norm);
     }
@@ -56,5 +56,4 @@ public class NormalizerTest extends Assert {
         String norm = Normalizer.normalize(s, Normalizer.Form.NFC);
         assertEquals(56, norm.length());
     }
-
 }

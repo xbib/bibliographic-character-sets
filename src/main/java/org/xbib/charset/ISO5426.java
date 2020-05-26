@@ -68,7 +68,7 @@ public class ISO5426 extends Charset {
 
     private static final Map<Character, Byte> charToByteTable = newMabByteToCharMap();
 
-    private boolean isNFCOutput;
+    private final boolean isNFCOutput;
 
     public ISO5426() {
         this(true);

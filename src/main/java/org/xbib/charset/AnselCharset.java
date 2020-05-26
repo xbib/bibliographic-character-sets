@@ -43,41 +43,28 @@ import java.nio.charset.CoderResult;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.xml.stream.XMLStreamException;
 
 /**
  *
  */
 public class AnselCharset extends Charset {
 
-    private static final Logger logger = Logger.getLogger(AnselCharset.class.getName());
+    private final Map<String, AnselCodeTableParser.CharacterSet> characterSetMap;
 
-    private static final Map<String, AnselCodeTableParser.CharacterSet> characterSetMap;
+    private final Charset encodeCharset;
 
-    static {
+    public AnselCharset() throws IOException {
+        super("ANSEL", BibliographicCharsetProvider.aliasesFor("ANSEL"));
+        this.encodeCharset = StandardCharsets.UTF_8;
         characterSetMap = new LinkedHashMap<>();
-        ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        try (InputStream inputStream = cl.getResource("org/xbib/charset/codetables.xml").openStream()) {
+        try (InputStream inputStream = AnselCharset.class.getResourceAsStream(("codetables.xml"))) {
             AnselCodeTableParser anselCodeTableParser = new AnselCodeTableParser(inputStream);
             for (AnselCodeTableParser.CodeTable codeTable : anselCodeTableParser.getCodeTables()) {
                 for (AnselCodeTableParser.CharacterSet characterSet : codeTable.getCharacterSets()) {
                     characterSetMap.put(characterSet.getName(), characterSet);
                 }
             }
-        } catch (Exception e) {
-            // sonar wants logging
-            logger.log(Level.SEVERE, e.getMessage(), e);
         }
-    }
-
-    private Charset encodeCharset;
-
-    public AnselCharset() throws XMLStreamException {
-        super("ANSEL", BibliographicCharsetProvider.aliasesFor("ANSEL"));
-        this.encodeCharset = StandardCharsets.UTF_8;
     }
 
     @Override
@@ -95,14 +82,17 @@ public class AnselCharset extends Charset {
 
     private static class Decoder extends CharsetDecoder {
 
-        String g0;
-        String g1;
+        private String g0;
 
-        Decoder(Charset cs, CharsetDecoder baseDecoder) {
+        private String g1;
+
+        Decoder(AnselCharset cs, CharsetDecoder baseDecoder) {
             super(cs, baseDecoder.averageCharsPerByte(), baseDecoder.maxCharsPerByte());
         }
 
+        @Override
         protected CoderResult decodeLoop(ByteBuffer in, CharBuffer out) {
+            AnselCharset charset = (AnselCharset) charset();
             g0 = "Basic Latin (ASCII)";
             g1 = "Extended Latin (ANSEL)";
             CharArrayWriter w = new CharArrayWriter();
@@ -121,8 +111,9 @@ public class AnselCharset extends Charset {
                         return CoderResult.UNDERFLOW;
                     }
                 }
-                AnselCodeTableParser.CharacterSet characterSet = isG0(oldChar) ? characterSetMap.get(g0) :
-                        isG1(oldChar) ? characterSetMap.get(g1) : null;
+                AnselCodeTableParser.CharacterSet characterSet = isG0(oldChar) ?
+                        charset.characterSetMap.get(g0) :
+                        isG1(oldChar) ? charset.characterSetMap.get(g1) : null;
                 int len = characterSet != null ? characterSet.getLength() : 1;
                 String str = len == 1 ? "" + oldChar : "" + oldChar + (char) (in.get() & 0xFF) + (char) (in.get() & 0xFF);
                 AnselCodeTableParser.Code code = characterSet != null ? characterSet.getMarc().get(str) : null;
@@ -141,8 +132,6 @@ public class AnselCharset extends Charset {
                         try {
                             w.write(diacritics.toCharArray());
                         } catch (IOException e) {
-                            // sonar wants logging
-                            logger.log(Level.SEVERE, e.getMessage(), e);
                             w.flush();
                         }
                         diacritics = new CharArrayWriter();
@@ -258,22 +247,14 @@ public class AnselCharset extends Charset {
                     break;
                 case '$':
                     oneByte = in.get();
-                    switch (oneByte) {
-                        case '1':
-                            g0 = "Chinese, Japanese, Korean (EACC)";
-                            break;
-                        default:
-                            break;
+                    if (oneByte == '1') {
+                        g0 = "Chinese, Japanese, Korean (EACC)";
                     }
                     break;
                 case '!':
                     oneByte = in.get();
-                    switch (oneByte) {
-                        case 'E':
-                            g0 = "Extended Latin (ANSEL)";
-                            break;
-                        default:
-                            break;
+                    if (oneByte == 'E') {
+                        g0 = "Extended Latin (ANSEL)";
                     }
                     break;
                 default:

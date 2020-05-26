@@ -31,10 +31,8 @@
  */
 package org.xbib.charset;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
+import java.util.logging.Logger;
 import javax.xml.stream.XMLStreamException;
 
 /**
@@ -42,14 +40,12 @@ import javax.xml.stream.XMLStreamException;
  */
 public class AnselCodeTableParserTest {
 
-    private Logger logger = LogManager.getLogger(AnselCodeTableParserTest.class);
-
     @Test
     public void test() throws XMLStreamException {
         AnselCodeTableParser anselCodeTableParser = new AnselCodeTableParser(getClass().getResourceAsStream("codetables.xml"));
         for (AnselCodeTableParser.CodeTable codeTable : anselCodeTableParser.getCodeTables()) {
             for (AnselCodeTableParser.CharacterSet characterSet : codeTable.getCharacterSets()) {
-                logger.info("{} {}", characterSet.getName(), characterSet.getLength());
+                Logger.getLogger(AnselCodeTableParserTest.class.getName()).info(characterSet.getName() + " " + characterSet.getLength());
             }
         }
     }

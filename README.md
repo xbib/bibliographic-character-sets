@@ -15,8 +15,9 @@ in migrating library data to Unicode, and UTF-8, respectively.
 
 | Version | Release date |
 | ------- | ------------ |
-|   1.0.0 | Aug 18, 2016 |
+|   1.0.2 | Aug 30, 2016 |
 |   1.0.1 | Aug 20, 2016 |
+|   1.0.0 | Aug 18, 2016 |
 
 ## Usage
 
@@ -25,7 +26,7 @@ With Maven
     <dependency>
         <groupId>org.xbib</groupId>
         <artifactId>bibliographic-character-sets</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </dependency>
 
 With Gradle
@@ -34,7 +35,7 @@ With Gradle
       provided
     }
     dependencies {
-       provided 'org.xbib:bibliographic-character-sets:1.0.1'
+       provided 'org.xbib:bibliographic-character-sets:1.0.2'
     }
 
 You can also include this jar in the classpath, the Java CharsetProvider and

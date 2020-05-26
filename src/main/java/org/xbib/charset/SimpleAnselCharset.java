@@ -45,9 +45,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This is a simplified version of "ANSEL charset" at http://anselcharset.sourceforge.net/
@@ -57,11 +56,13 @@ import java.util.logging.Logger;
 public class SimpleAnselCharset extends Charset {
 
     private final Map<Character, byte[]> mapping;
+
     private final Map<Byte, ReverseMappingEntity> reverseMapping;
 
     public SimpleAnselCharset() {
         super("SIMPLE_ANSEL", BibliographicCharsetProvider.aliasesFor("SIMPLE_ANSEL"));
-        mapping = createMapping(getClass().getResourceAsStream("ansel-mapping.txt"));
+        this.mapping = createMapping(getClass().getResourceAsStream("ansel-mapping.txt"));
+        Objects.requireNonNull(this.mapping);
         reverseMapping = createReverseMapping(mapping);
     }
 
@@ -90,10 +91,30 @@ public class SimpleAnselCharset extends Charset {
                     mapping.put(uniCode, ansCodes);
                 }
             }
+            return mapping;
         } catch (IOException e) {
-            Logger.getLogger(SimpleAnselCharset.class.getName()).log(Level.WARNING, e.getMessage(), e);
+            return null;
         }
-        return mapping;
+    }
+
+    @Override
+    public boolean canEncode() {
+        return true;
+    }
+
+    @Override
+    public CharsetDecoder newDecoder() {
+        return new Decoder(this, reverseMapping);
+    }
+
+    @Override
+    public CharsetEncoder newEncoder() {
+        return new Encoder(this);
+    }
+
+    @Override
+    public boolean contains(Charset cs) {
+        return displayName().equals(cs.displayName());
     }
 
     private static Map<Byte, ReverseMappingEntity> createReverseMapping(Map<Character, byte[]> mapping) {
@@ -118,28 +139,10 @@ public class SimpleAnselCharset extends Charset {
         return rev;
     }
 
-    @Override
-    public boolean canEncode() {
-        return true;
-    }
-
-    @Override
-    public CharsetDecoder newDecoder() {
-        return new Decoder(this);
-    }
-
-    @Override
-    public CharsetEncoder newEncoder() {
-        return new Encoder(this);
-    }
-
-    @Override
-    public boolean contains(Charset cs) {
-        return displayName().equals(cs.displayName());
-    }
-
     private static class ReverseMappingEntity {
-        private TreeMap<Byte, ReverseMappingEntity> mapping = new TreeMap<>();
+
+        private final TreeMap<Byte, ReverseMappingEntity> mapping = new TreeMap<>();
+
         private Character character;
 
         public Character getCharacter() {
@@ -155,11 +158,15 @@ public class SimpleAnselCharset extends Charset {
         }
     }
 
-    private class Decoder extends CharsetDecoder {
-        private LinkedList<Byte> buffer = new LinkedList<>();
+    private static class Decoder extends CharsetDecoder {
 
-        Decoder(Charset charset) {
+        private final Map<Byte, ReverseMappingEntity> reverseMapping;
+
+        private final LinkedList<Byte> buffer = new LinkedList<>();
+
+        Decoder(Charset charset, Map<Byte, ReverseMappingEntity> reverseMapping) {
             super(charset, 2.2f, 3.0f);
+            this.reverseMapping = reverseMapping;
         }
 
         @Override
@@ -219,9 +226,11 @@ public class SimpleAnselCharset extends Charset {
         }
     }
 
-    abstract class ReverseMappingBuffer {
-        private Map<Byte, ReverseMappingEntity> rm;
-        private LinkedList<Byte> buffer;
+    abstract static class ReverseMappingBuffer {
+
+        private final Map<Byte, ReverseMappingEntity> rm;
+
+        private final LinkedList<Byte> buffer;
 
         ReverseMappingBuffer(Map<Byte, ReverseMappingEntity> rm, LinkedList<Byte> buffer) {
             this.rm = rm;

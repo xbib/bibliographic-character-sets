@@ -1,8 +1,0 @@
-ext {
-    user = 'xbib'
-    projectName = 'bibliographic-character-sets'
-    projectDescription = 'Bibliographic character sets'
-    scmUrl = 'https://github.com/xbib/bibliographic-character-sets'
-    scmConnection = 'scm:git:git://github.com/xbib/bibliographic-character-sets.git'
-    scmDeveloperConnection = 'scm:git:git://github.com/xbib/bibliographic-character-sets.git'
-}

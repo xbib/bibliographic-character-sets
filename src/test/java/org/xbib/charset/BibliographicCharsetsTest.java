@@ -31,10 +31,8 @@
  */
 package org.xbib.charset;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 

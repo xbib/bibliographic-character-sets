@@ -47,7 +47,7 @@ public class PicaCharset extends Charset {
 
     private static final Map<Character, Byte> CHAR_TO_BYTE_MAP = newCharToByteMap();
 
-    private boolean isNFCOutput;
+    private final boolean isNFCOutput;
 
     public PicaCharset() {
         this(true);

@@ -37,26 +37,27 @@ import java.nio.charset.spi.CharsetProvider;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Extra bibliographic character sets.
  */
 public class BibliographicCharsetProvider extends CharsetProvider {
 
-    private static final Logger logger = Logger.getLogger(BibliographicCharsetProvider.class.getName());
-
     /**
      * The reference to the character set instance.
      * If there are no remaining references to this instance,
      * the character set will be removed by the garbage collector.
      */
-    private static volatile BibliographicCharsetProvider instance = new BibliographicCharsetProvider();
+    private static final BibliographicCharsetProvider instance = new BibliographicCharsetProvider();
+
     private final Map<String, String> classMap;
+
     private final Map<String, String> aliasMap;
+
     private final Map<String, String[]> aliasNameMap;
+
     private final Map<String, SoftReference<Charset>> cache;
+
     private final String packagePrefix;
 
     /**
@@ -96,9 +97,9 @@ public class BibliographicCharsetProvider extends CharsetProvider {
 
     @Override
     public final Iterator<Charset> charsets() {
-        return new Iterator<Charset>() {
+        return new Iterator<>() {
 
-            Iterator<String> iterator = classMap.keySet().iterator();
+            final Iterator<String> iterator = classMap.keySet().iterator();
 
             @Override
             public boolean hasNext() {
@@ -144,16 +145,11 @@ public class BibliographicCharsetProvider extends CharsetProvider {
         }
         try {
             Class<?> cl = Class.forName(packagePrefix + "." + className, true, getClass().getClassLoader());
-            Charset charset = (Charset) cl.newInstance();
+            Charset charset = (Charset) cl.getDeclaredConstructor().newInstance();
             cache.put(charsetName, new SoftReference<>(charset));
             return charset;
-        } catch (ClassNotFoundException e1) {
-            logger.log(Level.WARNING, "Class not found: " + packagePrefix + "." + className, e1);
-        } catch (IllegalAccessException e2) {
-            logger.log(Level.WARNING, "Illegal access: " + packagePrefix + "." + className, e2);
-        } catch (InstantiationException e3) {
-            logger.log(Level.WARNING, "Instantiation failed: " + packagePrefix + "." + className, e3);
+        } catch (Exception e) {
+            return null;
         }
-        return null;
     }
 }

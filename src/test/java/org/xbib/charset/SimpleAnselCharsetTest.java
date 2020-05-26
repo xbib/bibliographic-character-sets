@@ -31,34 +31,34 @@
  */
 package org.xbib.charset;
 
-import org.junit.Assert;
-import org.junit.Test;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.SortedMap;
 
 /**
  *
  */
-public class SimpleAnselCharsetTest extends Assert {
+public class SimpleAnselCharsetTest {
 
     @Test
-    public void listCharsets() throws Exception {
+    public void listCharsets() {
         SortedMap<String, Charset> map = Charset.availableCharsets();
-        assertTrue(map.keySet().contains("SIMPLE_ANSEL"));
+        assertTrue(map.containsKey("SIMPLE_ANSEL"));
     }
 
     @Test
     public void testSimpleAnsel() throws Exception {
-        ByteBuffer buf = ByteBuffer.wrap("\u00e8\u0075".getBytes("ISO-8859-1"));
+        ByteBuffer buf = ByteBuffer.wrap("\u00e8\u0075".getBytes(StandardCharsets.ISO_8859_1));
         Charset charset = Charset.forName("SIMPLE_ANSEL");
         CharsetDecoder decoder = charset.newDecoder();
         CharBuffer cbuf = decoder.decode(buf);
         String output = cbuf.toString();
         assertEquals("\u00fc", output);
     }
-
 }

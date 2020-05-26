@@ -53,6 +53,7 @@ import java.util.Map;
 public class Pica extends Charset {
 
     private static final Map<Character, Character> encodeMap = new HashMap<>();
+
     private static final Map<Character, Character> decodeMap = new HashMap<>();
 
     /*
@@ -62,8 +63,7 @@ public class Pica extends Charset {
      * which are different from ISO-8859-1.
      */
     static {
-        Pica.charTable(encodeMap, decodeMap, '\u00a0', '\u00ff',
-                new char[]{
+        Pica.charTable(new char[] {
                         '\u00a0', '\u0141', '\u00d8', '\u0110', '\u00de', '\u00c6',
                         '\u0152', '\u02b9', '\u00b7', '\u266d', '\u00ae', '\u00b1',
                         '\u01a0', '\u01af', '\u02be', '\u00c5', '\u02bf', '\u0142',
@@ -86,7 +86,7 @@ public class Pica extends Charset {
     // Handle to the real charset we'll use for transcoding between
     // characters and bytes.  Doing this allows applying the Pica
     // charset to multi-byte charset encodings like UTF-8.
-    private Charset encodeCharset;
+    private final Charset encodeCharset;
 
     /**
      * Constructor for the Pica charset.  Call the superclass
@@ -101,16 +101,13 @@ public class Pica extends Charset {
     /**
      * Fill the conversion tables.
      */
-    private static void charTable(Map<Character, Character> encodeMap, Map<Character, Character> decodeMap, char from, char to,
-                                  char[] code) {
+    private static void charTable(char[] code) {
         int i = 0;
-
-        for (char c = from; c <= to; c++) {
+        for (char c = '\u00a0'; c <= '\u00ff'; c++) {
             if (code[i] != '\u0000') {
                 encodeMap.put(code[i], c);
                 decodeMap.put(c, code[i]);
             }
-
             i++;
         }
     }
@@ -143,7 +140,7 @@ public class Pica extends Charset {
 
     private static class PicaEncoder extends CharsetEncoder {
 
-        private CharsetEncoder baseEncoder;
+        private final CharsetEncoder baseEncoder;
 
         /**
          * Constructor, call the superclass constructor with the
@@ -225,4 +222,3 @@ public class Pica extends Charset {
         }
     }
 }
-

@@ -31,9 +31,9 @@
  */
 package org.xbib.charset;
 
-import org.junit.Assert;
-import org.junit.Test;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -44,12 +44,12 @@ import java.util.SortedMap;
 /**
  *
  */
-public class ISO5426Test extends Assert {
+public class ISO5426Test {
 
     @Test
     public void listCharsets() throws Exception {
         SortedMap<String, Charset> map = Charset.availableCharsets();
-        assertTrue(map.keySet().contains("ISO-5426"));
+        assertTrue(map.containsKey("ISO-5426"));
     }
 
     @Test
@@ -81,5 +81,4 @@ public class ISO5426Test extends Assert {
         String output = cbuf.toString();
         assertEquals(output, "£");
     }
-
 }

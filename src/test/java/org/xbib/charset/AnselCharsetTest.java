@@ -31,23 +31,23 @@
  */
 package org.xbib.charset;
 
-import org.junit.Assert;
-import org.junit.Test;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 import java.text.Normalizer;
 
 /**
  *
  */
-public class AnselCharsetTest extends Assert {
+public class AnselCharsetTest {
 
     @Test
     public void testAnsel() throws Exception {
-        ByteBuffer buf = ByteBuffer.wrap("\u00e8\u0075".getBytes("ISO-8859-1"));
+        ByteBuffer buf = ByteBuffer.wrap("\u00e8\u0075".getBytes(StandardCharsets.ISO_8859_1));
         Charset charset = Charset.forName("ANSEL");
         CharsetDecoder decoder = charset.newDecoder();
         CharBuffer cbuf = decoder.decode(buf);
@@ -59,7 +59,8 @@ public class AnselCharsetTest extends Assert {
 
     @Test
     public void testAnsel2() throws Exception {
-        ByteBuffer buf = ByteBuffer.wrap("\u00AC\u00E2\u0041\u00ED\u0042\u00E2\u0043\u00E2\u0044".getBytes("ISO-8859-1"));
+        ByteBuffer buf =
+                ByteBuffer.wrap("\u00AC\u00E2\u0041\u00ED\u0042\u00E2\u0043\u00E2\u0044".getBytes(StandardCharsets.ISO_8859_1));
         Charset charset = Charset.forName("ANSEL");
         CharsetDecoder decoder = charset.newDecoder();
         CharBuffer cbuf = decoder.decode(buf);

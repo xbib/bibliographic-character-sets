@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to Jörg Prante and xbib under one or more contributor
  * license agreements. See the NOTICE.txt file distributed with this work
  * for additional information regarding copyright ownership.
@@ -28,7 +28,6 @@
  * "Powered by xbib" logo. If the display of the logo is not reasonably
  * feasible for technical reasons, the Appropriate Legal Notices must display
  * the words "Powered by xbib".
- *
  *
  * Derived from
  *
@@ -68,7 +67,6 @@
  * this exception to your version of the library, but you are not
  * obligated to do so.  If you do not wish to do so, delete this
  * exception statement from your version.
- *//**
  *
  * Derived from
  *
@@ -157,7 +155,7 @@ abstract class ByteCharset extends Charset {
 
     private static final class Decoder extends CharsetDecoder {
 
-        private char[] lookup;
+        private final char[] lookup;
 
         Decoder(ByteCharset cs) {
             super(cs, 1.0f, 1.0f);
@@ -182,19 +180,18 @@ abstract class ByteCharset extends Charset {
 
     private static final class Encoder extends CharsetEncoder {
 
-        private byte[] lookup;
+        private final byte[] lookup;
 
         Encoder(ByteCharset cs) {
             super(cs, 1.0f, 1.0f);
             char[] lookuptable = cs.getLookupTable();
             int max = 0;
             for (char ch : lookuptable) {
-                int c = (int) ch;
-                max = c > max && c < NONE ? c : max;
+                max = (int) ch > max && (int) ch < NONE ? (int) ch : max;
             }
             lookup = new byte[max + 1];
             for (int i = 0; i < lookuptable.length; i++) {
-                int c = (int) lookuptable[i];
+                int c = lookuptable[i];
                 if (c != 0 && c < NONE) {
                     lookup[c] = (byte) i;
                 }
@@ -203,7 +200,7 @@ abstract class ByteCharset extends Charset {
 
         protected CoderResult encodeLoop(CharBuffer in, ByteBuffer out) {
             while (in.hasRemaining()) {
-                int c = (int) in.get();
+                int c = in.get();
                 if (!out.hasRemaining()) {
                     in.position(in.position() - 1);
                     return CoderResult.OVERFLOW;
