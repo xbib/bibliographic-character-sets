@@ -101,10 +101,18 @@ public class PicaCharset extends Charset {
         map[0xAD] = '\u01AF';
         /* Modifier letter apostrophe */
         map[0xAE] = '\u02BC';
+
+        // HTML SOURCE = '\u00b4' ?
+        // arab. ALIF? MODIFIER LETTER RIGHT HALF RING?   '\u02be' ?
+
         /* LATIN CAPITAL LETTER A WITH RING ABOVE */
         map[0xAF] = '\u00C5';
         /* Modifier letter turned comma */
         map[0xB0] = '\u02BB';
+
+        // HTML SOURCE =  Grave accent?
+        // arab. AYN? MODIFIER LETTER LEFT HALF RING? U+02BF
+
         /* Latin small letter l with stroke */
         map[0xB1] = '\u0142';
         /* Latin small letter o with stroke */
